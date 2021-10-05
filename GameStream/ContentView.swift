@@ -25,7 +25,7 @@ struct ContentView: View {
 
 struct InicioRegistroView:View{
     
-    @State var tipoInicioSesion = true
+    @State var tipoInicioSesion = false
     
     var body: some View{
         VStack{
@@ -95,7 +95,7 @@ struct InicioView:View{
                 
                 Text("¿Olvidaste tu contraseña?").font(.footnote)
                     .foregroundColor(Color("dark-cian"))
-                    .frame(width: 300, alignment: .trailing)
+                    .frame(maxWidth: .infinity , alignment: .trailing)
                     .padding(.bottom)
                
                 Button(action: iniciarSesion){
@@ -135,7 +135,7 @@ struct InicioView:View{
                     }
                 }
                 
-            }.padding(.horizontal,42.0)
+            }.padding(.horizontal, 15.0)
         }
         
     }
@@ -263,8 +263,8 @@ struct RegistroView:View{
                             .background(Color("blue-gray"))
                             .clipShape(RoundedRectangle(cornerRadius: 4.0))
                     }
-                }
-            }.padding(.horizontal, 42.0)//VStack-Formulario
+                }.padding(.bottom)
+            }.padding(.horizontal, 15.0)//VStack-Formulario
         }//ScrollView
     }//body
 }//RegistroView
