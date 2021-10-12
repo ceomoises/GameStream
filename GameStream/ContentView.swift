@@ -8,98 +8,70 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State var tipoInicioSesion = true
+    
     var body: some View {
         ZStack {
+            //Background Color with ZStack
             Color(red: 0.07, green: 0.12, blue: 0.24).ignoresSafeArea()
             VStack{
+                // Image of GameStream
                 Image("applogo")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 250)
                     .padding(.bottom, 42)
-                InicioRegistroView()
+                // Buttons of login
+                HStack {
+                    Spacer()
+                    login
+                    Spacer()
+                    registro
+                    Spacer()
+                }
+                // Type Of Login
+                Spacer(minLength: 42)
+                if tipoInicioSesion {
+                    InicioView()
+                } else{
+                    RegistroView()
+                }
             }
         }
     }
-}
-
-struct InicioRegistroView:View{
     
-    @State var tipoInicioSesion = false
-    
-    var body: some View{
-        VStack{
-            HStack {
-                Spacer()
-                Button("INICIA SESIÓN"){
-                    tipoInicioSesion = true
-                    print("Pantalla inicio sesión")
-                }.foregroundColor( tipoInicioSesion ? .white: .gray)
-                Spacer()
-                Button("REGÍSTRATE"){
-                    tipoInicioSesion = false
-                    print("Pantalla de registro")
-                }.foregroundColor( tipoInicioSesion ? .gray: .white)
-                Spacer()
-            }
-            Spacer(minLength: 42)
-            if tipoInicioSesion == true {
-                InicioView()
-            }else{
-                RegistroView()
-            }
-        }
+    var login: some View {
+        Button("INICIA SESIÓN"){
+            tipoInicioSesion = true
+        }.foregroundColor( tipoInicioSesion ? .white: .gray)
     }
+    var registro: some View {
+        Button("REGÍSTRATE"){
+            tipoInicioSesion = false
+        }.foregroundColor( tipoInicioSesion ? .gray: .white)
+    }
+    
 }
 
 struct InicioView:View{
     
-    @State var correo = ""
-    @State var contrasena = ""
-    
     var body: some View {
         ScrollView{
             VStack(alignment: .leading){
+            
+                inputField(title: "Correo electrónico", placeholder: "Escribe tú correo electronico")
+                inputField(title: "Contraseña", placeholder: "Escribe tú contraseña aquí",plainText: false)
                 
-                //--> CAMPO CORREO
-                Text("Correo electrónico").bold()
-                    .foregroundColor(Color("dark-cian"))
-                    
-                ZStack(alignment:.leading){
-                    if correo.isEmpty{
-                        Text("Escribe tú correo electronico").font(.caption)
-                            .foregroundColor(.gray)
-                    }
-                    TextField("", text: $correo)
-                }
-                Divider().frame( height: 1)
-                    .background(Color("dark-cian"))
-                    .padding(.bottom)
-                
-                //--> CAMPO CONTRASEÑA
-                Text("Contraseña").bold()
-                    .foregroundColor(Color("light-gray"))
-                
-                ZStack(alignment:.leading){
-                    if contrasena.isEmpty{
-                        Text("Escribe tú contraseña aquí").font(.caption)
-                            .foregroundColor(.gray)
-                    }
-                    SecureField("", text: $contrasena)
-                }
-                Divider().frame( height: 1)
-                    .background(Color("dark-cian"))
-                    .padding(.bottom)
-                
-                // --> BOTONES DE INICIO DE SESIÓN
-                
-                Text("¿Olvidaste tu contraseña?").font(.footnote)
+                Text("¿Olvidaste tu contraseña?")
+                    .font(.footnote)
                     .foregroundColor(Color("dark-cian"))
                     .frame(maxWidth: .infinity , alignment: .trailing)
                     .padding(.bottom)
                
-                Button(action: iniciarSesion){
-                    Text("INICIAR SESÍON").fontWeight(.bold)
+                Button{ print("Iniciar Sesión") } label:{
+                    Text("INICIAR SESÍON")
+                        .fontWeight(.bold)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(EdgeInsets(top: 11, leading: 18, bottom: 11, trailing: 18))
@@ -108,54 +80,30 @@ struct InicioView:View{
                                     .shadow(color: .white, radius: 6))
                 }
                 
-                Text("Inicia sesión con redes sociales").foregroundColor(.white)
+                Text("Iniciar sesión con redes sociales")
+                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(EdgeInsets(top: 40, leading: 0, bottom: 10, trailing: 0))
                 
-                HStack{
-                    Button(action: {print("iniciar facebook")}){
-                        Text("Facebook")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .padding(.vertical,8.0)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .background(Color("blue-gray"))
-                            .clipShape(RoundedRectangle(cornerRadius: 4.0))
+                HStack {
+                    Button{ print("Iniciar con Facebook") } label:{
+                        socialText(nombre: "Facebook")
                     }
-                    Button(action: {print("iniciar twitter")}){
-                        Text("Twitter")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .padding(.vertical,8.0)
-                            .frame(maxWidth: .infinity,alignment: .center)
-                            .background(Color("blue-gray"))
-                            .clipShape(RoundedRectangle(cornerRadius: 4.0))
+                    Button{ print("Iniciar con twitter") } label: {
+                        socialText(nombre: "Twitter")
                     }
                 }
                 
             }.padding(.horizontal, 15.0)
         }
-        
     }
-}
-
-func iniciarSesion(){
-    print("Estoy iniciando sesión")
 }
 
 struct RegistroView:View{
     
-    @State var correo = ""
-    @State var contrasena = ""
-    @State var confirmarContrasena = ""
-    
     var body: some View {
-        
         ScrollView{
-            
-            //FOTOGRAFIA
+            // FOTOGRAFIA
             VStack(alignment:.center){
                 Text("Elige una foto de perfil")
                     .fontWeight(.bold)
@@ -165,7 +113,7 @@ struct RegistroView:View{
                     .fontWeight(.light)
                     .foregroundColor(.gray)
                     .padding(.bottom)
-                Button(action: tomarFoto){
+                Button{ print("Tomar foto") }label:{
                     ZStack {
                         Image("foto-prueba")
                             .resizable()
@@ -176,59 +124,14 @@ struct RegistroView:View{
                     }
                 }
             }.padding(.bottom)//VStack fotografía
-            
-            //VStack-Formulario
+            // REGISTRO
             VStack(alignment: .leading){
-                
-                //VStack-EntradasTexto
-                VStack(alignment:.leading){
-                    //--> CAMPO CORREO
-                    Text("Correo electrónico*").bold()
-                        .foregroundColor(Color("dark-cian"))
-                    
-                    ZStack(alignment:.leading){
-                        if correo.isEmpty{
-                            Text("Escribe tú correo electronico").font(.caption)
-                                .foregroundColor(.gray)
-                        }
-                        TextField("", text: $correo)
-                    }
-                    Divider().frame( height: 1)
-                        .background(Color("dark-cian"))
-                        .padding(.bottom)
-                    
-                    //--> CAMPO CONTRASEÑA
-                    Text("Contraseña*").bold()
-                        .foregroundColor(Color("light-gray"))
-                    
-                    ZStack(alignment:.leading){
-                        if contrasena.isEmpty{
-                            Text("Escribe tú contraseña").font(.caption)
-                                .foregroundColor(.gray)
-                        }
-                        SecureField("", text: $contrasena)
-                    }
-                    Divider().frame( height: 1)
-                        .background(Color("dark-cian"))
-                        .padding(.bottom)
-                    
-                    // --> CAMPO CONFIRMAR
-                    Text("Confirmar contraseña*").bold()
-                        .foregroundColor(Color("light-gray"))
-                    
-                    ZStack(alignment:.leading){
-                        if confirmarContrasena.isEmpty{
-                            Text("Escribe de nuevo tú contraseña").font(.caption)
-                                .foregroundColor(.gray)
-                        }
-                        SecureField("", text: $confirmarContrasena)
-                    }
-                    Divider().frame( height: 1)
-                        .background(Color("dark-cian"))
-                        .padding(.bottom)
-                }.padding(.bottom)//VStack-EntradasTexto
-                
-                Button(action: registrate){
+
+                inputField(title:"Correo electrónico*",placeholder:"Escribe tú correo electronico")
+                inputField(title: "Contraseña*", placeholder: "Escribe tú contraseña", plainText: false)
+                inputField(title: "Confirmar contraseña*", placeholder: "Escribe de nuevo tú contraseña",plainText: false)
+               
+                Button{ print("Registrando Usuario") } label:{
                     Text("REGISTRATE").fontWeight(.bold)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity, alignment: .center)
@@ -243,38 +146,61 @@ struct RegistroView:View{
                     .padding(EdgeInsets(top: 40, leading: 0, bottom: 10, trailing: 0))
                 
                 HStack{
-                    Button(action: {print("Registrarse con facebook")}){
-                        Text("Facebook")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .padding(.vertical,8.0)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .background(Color("blue-gray"))
-                            .clipShape(RoundedRectangle(cornerRadius: 4.0))
+                    Button{ print("Registrarse con facebook") }label:{
+                        socialText(nombre: "Facebook")
                     }
-                    Button(action: {print("Registrarse con twitter")}){
-                        Text("Twitter")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .padding(.vertical,8.0)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .background(Color("blue-gray"))
-                            .clipShape(RoundedRectangle(cornerRadius: 4.0))
+                    Button{ print("Registrarse con twitter") }label:{
+                        socialText(nombre: "Twitter")
                     }
                 }.padding(.bottom)
-            }.padding(.horizontal, 15.0)//VStack-Formulario
-        }//ScrollView
-    }//body
-}//RegistroView
-
-func registrate(){
-    print("registrandose...")
+            }.padding(.horizontal, 15.0)
+        }
+    }
 }
 
-func tomarFoto(){
-    print("tomando foto...")
+struct inputField: View {
+    
+    @State var contenido = ""
+    var title: String
+    var placeholder: String
+    var plainText : Bool = true
+    
+    var body: some View {
+        
+        Text(title).bold()
+            .foregroundColor(Color("dark-cian"))
+        
+        ZStack(alignment:.leading){
+            if plainText {
+                TextField( "",text: $contenido)
+            }else{
+                SecureField("",text: $contenido)
+            }
+            if contenido.isEmpty {
+                Text(placeholder)
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+        }
+        
+        Divider().frame( height: 1)
+            .background(Color("dark-cian"))
+            .padding(.bottom)
+    }
+}
+
+struct socialText: View {
+    var nombre : String
+    var body: some View {
+        Text(nombre)
+            .font(.subheadline)
+            .fontWeight(.bold)
+            .foregroundColor(.white)
+            .padding(.vertical,8.0)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .background(Color("blue-gray"))
+            .clipShape(RoundedRectangle(cornerRadius: 4.0))
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
